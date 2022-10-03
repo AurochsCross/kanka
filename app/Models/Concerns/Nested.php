@@ -39,7 +39,7 @@ trait Nested
      *
      * @var array|null
      */
-    protected array|null $pending;
+    protected $pending;
 
     /**
      * Whether the node has moved since last save.
@@ -1184,11 +1184,11 @@ trait Nested
     }
 
     /**
-     * @param int $value
+     * @param int|null $value
      *
      * @return $this
      */
-    public function setParentId(int $value)
+    public function setParentId(int|null $value)
     {
         $this->attributes[$this->getParentIdName()] = $value;
 

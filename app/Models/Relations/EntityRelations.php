@@ -52,7 +52,8 @@ use Illuminate\Database\Eloquent\Collection;
  * @property Attribute[]|Collection $allAttributes
  * @property Attribute[]|Collection $starredAttributes
  * @property Relation[]|Collection $starredRelations
- * @property Relation[]|Collection $relations
+ * @property Relation[]|Collection $relationships
+ * @property Relation[]|Collection $familyRelations
  * @property EntityEvent[]|Collection $elapsedEvents
  * @property EntityEvent[]|Collection $calendarDateEvents
  * @property Image|null $image
@@ -503,6 +504,17 @@ trait EntityRelations
         return $this->relationships()
             ->stared()
             ->ordered()
+            ->with('target')
+            ->has('target');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function familyRelations()
+    {
+        return $this->relationships()
+            ->whereNotNull('type_id')
             ->with('target')
             ->has('target');
     }

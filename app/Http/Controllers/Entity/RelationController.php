@@ -149,15 +149,14 @@ class RelationController extends Controller
         $this->authorize('update', $entity->child);
 
         $data = $request->only([
-            'owner_id', 'target_id', 'attitude', 'relation', 'colour', 'is_star', 'two_way', 'visibility_id'
+            'owner_id', 'target_id', 'attitude', 'relation', 'colour', 'is_star', 'two_way', 'visibility_id', 'type_id',
         ]);
 
         /** @var Relation $relation */
-        $relation = new Relation();
-        $relation = $relation->create($data);
+        $relation = Relation::create($data);
 
         if ($request->has('two_way')) {
-            $relation->createMirror();
+            $relation->createMirror($request->get('target_relation'));
         }
 
         $mode = $this->getModeOption(true);
@@ -204,7 +203,7 @@ class RelationController extends Controller
     public function update(StoreRelation $request, Entity $entity, Relation $relation)
     {
         $this->authorize('update', $entity->child);
-        $data = $request->only(['target_id', 'attitude', 'relation', 'colour', 'is_star', 'two_way', 'visibility_id']);
+        $data = $request->only(['target_id', 'attitude', 'relation', 'colour', 'is_star', 'two_way', 'visibility_id', 'type_id']);
 
         $relation->update($data);
         $relation->refresh();

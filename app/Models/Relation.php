@@ -26,9 +26,11 @@ use Illuminate\Database\Eloquent\Builder;
  * @property bool $is_star
  * @property string $colour
  * @property string $marketplace_uuid
+ * @property int|null $type_id
  *
  * @property Relation|null $mirror
  * @property Entity|null $target
+ * @property RelationType|null $type
  * @property Entity $owner
  * @property int $created_at
  * @property int $updated_at
@@ -61,6 +63,7 @@ class Relation extends Model
         'attitude',
         'is_star',
         'colour',
+        'type_id',
     ];
 
     protected $sortable = [
@@ -123,6 +126,14 @@ class Relation extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function type()
+    {
+        return $this->belongsTo(RelationType::class);
+    }
+
+    /**
      * Check if a relation is mirrored
      * @return bool
      */
@@ -133,21 +144,22 @@ class Relation extends Model
 
     /**
      * Create a mirror of the relation
+     * @param string|null $target name of the relation on the mirror
      */
-    public function createMirror(): void
+    public function createMirror(string|null $target): void
     {
-        $target = request()->get('target_relation');
-        $mirror = Relation::create([
-            'owner_id' => $this->target_id,
-            'target_id' => $this->owner_id,
-            'campaign_id' => $this->campaign_id,
-            'relation' => !empty($target) ? $target : $this->relation,
-            'attitude' => $this->attitude,
-            'colour' => $this->colour,
-            'visibility_id' => $this->visibility_id,
-            'is_star' => $this->is_star,
-            'mirror_id' => $this->id,
-        ]);
+        $mirror = $this->replicate();
+        $mirror->target_id = $this->owner_id;
+        $mirror->owner_id = $this->target_id;
+        $mirror->relation = !empty($target) ? $target : $this->relation;
+        $mirror->mirror_id = $this->id;
+
+        if ($this->type_id === 3) {
+            $mirror->type_id = 4;
+        } elseif ($this->type_id === 4) {
+            $mirror->type_id = 3;
+        }
+        $mirror->save();
 
         // Update this relation to keep track of everything
         $this->update(['mirror_id' => $mirror->id]);

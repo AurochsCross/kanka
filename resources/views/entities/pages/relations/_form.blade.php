@@ -70,6 +70,16 @@
 
 @include('cruds.fields.visibility_id', ['model' => isset($relation) ? $relation : null])
 
+<div class="form-group">
+    <label>
+        {{ __('relations.fields.type') }}
+        <a href="//docs.kanka.io/en/latest/advanced/relations.html#type" target="_blank">
+            <i class="fa-solid fa-question-circle" data-toggle="tooltip" title="{{ __('relations.types.tooltip') }}"></i>
+        </a>
+    </label>
+    {{ Form::select('type_id', [null => '', 1 => __('Partner'), 3 => __('Parent'), 4 => __('Child')], null, ['class' => 'form-control']) }}
+</div>
+
 @if (!empty($mode))
     <input type="hidden" name="mode" value="{{ $mode }}" />
 @endif

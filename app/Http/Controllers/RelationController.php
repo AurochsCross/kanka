@@ -75,12 +75,11 @@ class RelationController extends CrudController
         }
 
         try {
-            $model = new $this->model;
             /** @var Relation $new */
-            $new = $model->create($request->all());
+            $new = Relation::create($request->all());
 
             if ($request->has('two_way')) {
-                $new->createMirror();
+                $new->createMirror($request->get('target_relation'));
             }
 
             $success = __($this->langKey . '.create.success', [

@@ -43,6 +43,7 @@ return [
             'all_members'   => 'All Members',
             'families'      => 'Families',
             'members'       => 'Members',
+            'tree'          => 'Family tree',
         ],
     ],
 ];
