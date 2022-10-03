@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Families;
 
+use App\Facades\CampaignLocalization;
 use App\Http\Controllers\Controller;
 use App\Models\Family;
 use App\Services\Families\FamilyTreeService;
@@ -28,10 +29,12 @@ class FamilyTreeController extends Controller
         }
 
         $this->service->family($family);
+        $campaign = CampaignLocalization::getCampaign();
 
         return view('families.family-tree')
             ->with('family', $family)
             ->with('tree', $this->service->generate())
+            ->with('campaign', $campaign)
         ;
     }
 }

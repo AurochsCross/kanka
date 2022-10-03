@@ -26,3 +26,37 @@
         </div>
     </div>
 @endsection
+
+@section('styles')
+    <style>
+        .family-tree {
+            display: flex;
+            align-items: flex-start;
+            flex-wrap: nowrap;
+        }
+        .branch {
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 5px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        .entity {
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 5px;
+
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            flex-basis: 100%;
+        }
+        .children {
+            border: 1px dotted black;
+            flex-direction: row;
+        }
+    </style>
+@endsection
